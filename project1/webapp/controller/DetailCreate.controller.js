@@ -2,8 +2,9 @@ sap.ui.define([
     "./BaseController",
     "sap/ui/model/json/JSONModel",
     "../model/formatter",
-    "sap/m/library"
-], function (BaseController, JSONModel, formatter, mobileLibrary) {
+    "sap/m/library",
+    "sap/m/MessageToast"
+], function (BaseController, JSONModel, formatter, mobileLibrary, MessageToast) {
     "use strict";
 
     // shortcut for sap.m.URLHelper
@@ -35,10 +36,10 @@ sap.ui.define([
                 ],
                 itemData: [
                     {
-                        itemno: null,
-                        itemname: null,
-                        itemcode: null,
-                        quantity: null
+                        Itemno: null,
+                        Itemname: null,
+                        Itemcode: null,
+                        Quantity: null
                     }
                 ]
             });
@@ -86,20 +87,47 @@ sap.ui.define([
         onAddItem : function () {
             var oModel = this.getView().getModel("detailView");
             var oRow = {
-                itemno: null,
-                itemname: null,
-                itemcode: null,
-                quantity: null
+                Itemno: null,
+                Itemname: null,
+                Itemcode: null,
+                Quantity: null
             };
 
             var oData = oModel.getProperty("/itemData");
-            oData.push({
-                itemno: null,
-                itemname: null,
-                itemcode: null,
-                quantity: null
-            });
+            oData.push(oRow);
             oModel.setProperty("/itemData", oData);
+        },
+
+        onPost : function() {
+            var oModel = this.getView().getModel("detailView"),
+                oData = oModel.getData();
+            var oODataModel = this.getView().getModel();
+
+            // post 요청 내용 - deep insert 
+            var oReqest = {
+                Buyer : oData.buyer,
+                Amount : oData.amount,
+                Currency : oData.currency,
+                ToSalesOrderItem : oData.itemData
+            }
+
+            oODataModel.create("/SalesOrderSet", oReqest, {
+                sucess : function(){
+                    MessageToast.show("저장 완료")
+                },
+                error : function(){
+                    MessageToast.show("저장 실패")
+                }
+            });
+            // oODataModel.submitChanges(
+            //     {
+            //         sucess : function(){
+            //             MessageToast.show("저장 완료")
+            //         },
+            //         error : function(){
+            //             MessageToast.show("저장 실패")
+            //         }
+            //     })
         }
     });
 

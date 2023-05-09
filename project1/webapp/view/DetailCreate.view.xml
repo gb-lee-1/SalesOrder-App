@@ -10,7 +10,8 @@
     <semantic:SemanticPage
         id="detailPage"
         busy="{detailView>/busy}"
-        busyIndicatorDelay="{detailView>/delay}">
+        busyIndicatorDelay="{detailView>/delay}"
+        showFooter="true">
         <semantic:titleHeading>
             <Title
                 text="{Soid}"
@@ -35,7 +36,7 @@
                         <Label text="구매자"/>
                         <Input value="{detailView>/buyer}"/>
                         <Label text="금액"/>
-                        <Input value="{detailView>/amount}"/>
+                        <Input value="{path: 'detailView>/amount' }"/>
                         <Label text="단위"/>
                         <ComboBox selectedKey="{detailView>/currency}" items="{detailView>/currList}">
                             <items>
@@ -77,10 +78,11 @@
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <Input value="{detailView>itemno}"/>
-                                <Input value="{detailView>itemname}"/>
-                                <Input value="{detailView>itemcode}"/>
-                                <Input value="{detailView>quantity}"/>
+                                <Input value="{detailView>Itemno}"/>
+                                <Input value="{detailView>Itemname}"/>
+                                <Input value="{detailView>Itemcode}"/>
+                                <Input value="{path: 'detailView>Quantity',
+                                    type: 'sap.ui.model.type.Integer'}"/>
                             </cells>
                         </ColumnListItem>
                     </items>
@@ -112,6 +114,9 @@
                     visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
                     press=".toggleFullScreen"/>
         </semantic:exitFullScreenAction>
+        <semantic:footerCustomActions>
+            <Button text="저장" type="Accept" press="onPost"/>
+        </semantic:footerCustomActions>
 
     </semantic:SemanticPage>
 
