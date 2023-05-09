@@ -33,12 +33,12 @@
                     layout="ResponsiveGridLayout"
                     title="헤더 정보">
                     <f:content>
-                        <Label text="구매자"/>
-                        <Input value="{detailView>/buyer}"/>
+                        <Label text="구매자" labelFor="inputBuyer"/>
+                        <Input value="{detailView>/buyer}" required="true" id="inputBuyer"/>
                         <Label text="금액"/>
-                        <Input value="{path: 'detailView>/amount' }"/>
+                        <Input value="{path: 'detailView>/amount' }" required="true" id="inputAmount"/>
                         <Label text="단위"/>
-                        <ComboBox selectedKey="{detailView>/currency}" items="{detailView>/currList}">
+                        <ComboBox selectedKey="{detailView>/currency}" items="{detailView>/currList}" required="true" id="combo">
                             <items>
                                 <core:Item key="{detailView>code}" text="{detailView>text}"/>
                             </items>

@@ -7,8 +7,9 @@ sap.ui.define([
     "sap/m/GroupHeaderListItem",
     "sap/ui/Device",
     "sap/ui/core/Fragment",
-    "../model/formatter"
-], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter) {
+    "../model/formatter",
+    "sap/m/MessageBox"
+], function (BaseController, JSONModel, Filter, Sorter, FilterOperator, GroupHeaderListItem, Device, Fragment, formatter, MessageBox) {
     "use strict";
 
     return BaseController.extend("project1.controller.List", {
@@ -233,11 +234,28 @@ sap.ui.define([
         onSelectionChange: function (oEvent) {
             var oList = oEvent.getSource(),
                 bSelected = oEvent.getParameter("selected");
+            var that = this,
+                sId = oEvent.getParameter("listItem").getBindingContext().getProperty("Soid");
 
-            // skip navigation when deselecting an item in multi selection mode
-            if (!(oList.getMode() === "MultiSelect" && !bSelected)) {
-                // get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
-                this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
+            var sHash = this.getRouter().oHashChanger.getHash();
+            if (sHash === "SalesOrderSet/New") {
+                MessageBox.confirm("작성중인 내용이 사라집니다. 이동하시겠습니까?",
+                    {
+                        onClose : function(sAction) {
+                            if (sAction === "OK") { // 확인 버튼 누르면 OK 라는 값이 들어옴
+                                that._showDetail(sId);
+                            }
+                        }
+                    })
+
+            } else {
+
+                // skip navigation when deselecting an item in multi selection mode
+                if (!(oList.getMode() === "MultiSelect" && !bSelected)) {
+                    // get the list item, either from the listItem parameter or from the event's source itself (will depend on the device-dependent mode).
+                    this._showDetail(sId);
+                    // this._showDetail(oEvent.getParameter("listItem") || oEvent.getSource());
+                }
             }
         },
 
@@ -308,7 +326,7 @@ sap.ui.define([
             // set the layout property of FCL control to show two columns
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
             this.getRouter().navTo("object", {
-                objectId : oItem.getBindingContext().getProperty("Soid")
+                objectId : oItem
             }, bReplace);
         },
 

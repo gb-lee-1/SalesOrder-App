@@ -3,8 +3,9 @@ sap.ui.define([
     "sap/ui/model/json/JSONModel",
     "../model/formatter",
     "sap/m/library",
-    "sap/m/MessageToast"
-], function (BaseController, JSONModel, formatter, mobileLibrary, MessageToast) {
+    "sap/m/MessageToast",
+    "sap/m/MessageBox"
+], function (BaseController, JSONModel, formatter, mobileLibrary, MessageToast, MessageBox) {
     "use strict";
 
     // shortcut for sap.m.URLHelper
@@ -81,6 +82,18 @@ sap.ui.define([
         _onObjectMatched: function (oEvent) {
             
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+
+            var oModel = this.getView().getModel("detailView");
+            oModel.setProperty("/buyer", null);
+            oModel.setProperty("/amount", null);
+            oModel.setProperty("/currency", null);
+            oModel.setProperty("/itemData", [
+            {
+                Itemno: null,
+                Itemname: null,
+                Itemcode: null,
+                Quantity: null
+            }]);
             
         },
 
@@ -99,26 +112,66 @@ sap.ui.define([
         },
 
         onPost : function() {
-            var oModel = this.getView().getModel("detailView"),
-                oData = oModel.getData();
-            var oODataModel = this.getView().getModel();
 
-            // post 요청 내용 - deep insert 
-            var oReqest = {
-                Buyer : oData.buyer,
-                Amount : oData.amount,
-                Currency : oData.currency,
-                ToSalesOrderItem : oData.itemData
+            var oInputBuyer = this.byId("inputBuyer"),
+                oInputAmount = this.byId("inputAmount"),
+                oComboBox = this.byId("combo");
+
+            var sValue1 = oInputBuyer.getValue(),
+                sValue2 = oInputAmount.getValue(),
+                sKey = oComboBox.getSelectedKey();
+
+            if (!sValue1) {
+                oInputBuyer.setValueState("Error");
+                oInputBuyer.setValueStateText("구매자는 필수 입력입니다")
+            } else {
+                oInputBuyer.setValueState();
             }
 
-            oODataModel.create("/SalesOrderSet", oReqest, {
-                sucess : function(){
-                    MessageToast.show("저장 완료")
-                },
-                error : function(){
-                    MessageToast.show("저장 실패")
+            if (!sValue2) {
+                oInputAmount.setValueState("Error");
+                oInputAmount.setValueStateText("구매자는 필수 입력입니다")
+            } else {
+                oInputAmount.setValueState();
+            }
+
+            if (!sKey) {
+                oComboBox.setValueState("Error");
+                oComboBox.setValueStateText("구매자는 필수 입력입니다")
+            } else {
+                oComboBox.setValueState();
+            }
+
+            // 필수값이 다 들어있을 경우
+            if( sValue1 && sValue2 && sKey ) {
+                var oModel = this.getView().getModel("detailView"),
+                    oData = oModel.getData();
+                var oODataModel = this.getView().getModel();
+
+                // post 요청 내용 - deep insert 
+                var oReqest = {
+                    Buyer : oData.buyer,
+                    Amount : oData.amount,
+                    Currency : oData.currency,
+                    ToSalesOrderItem : oData.itemData
                 }
-            });
+
+                return;
+                oODataModel.create("/SalesOrderSet", oReqest, {
+                    sucess : function(){
+                        MessageToast.show("저장 완료")
+                    },
+                    error : function(){
+                        MessageToast.show("저장 실패")
+                    }
+                });
+            } else {
+                // MessageToast.show("필수값을 입력하세요!")
+                MessageBox.error("필수값을 입력하세요!")
+            }
+            
+
+            
             // oODataModel.submitChanges(
             //     {
             //         sucess : function(){
