@@ -1,0 +1,140 @@
+<mvc:View
+    controllerName="project1.controller.List"
+    xmlns="sap.m"
+    xmlns:semantic="sap.f.semantic"
+    xmlns:mvc="sap.ui.core.mvc">
+
+    <semantic:SemanticPage
+        id="listPage"
+        preserveHeaderStateOnScroll="true"
+        toggleHeaderOnTitleClick="false">
+        <semantic:titleHeading>
+            <Title
+                id="listPageTitle"
+                text="{listView>/title}"
+                level="H2"/>
+        </semantic:titleHeading>
+        <semantic:content>
+            <!-- For client side filtering add this to the items attribute: parameters: {operationMode: 'Client'}}" -->
+            <Table
+                id="list"
+                width="auto"
+                class="sapFDynamicPageAlignContent"
+                items="{
+                    path: '/SalesOrderSet',
+                    sorter: {
+                        path: 'Soid',
+                        descending: false
+                    },
+                    groupHeaderFactory: '.createGroupHeader'
+                }"
+                busyIndicatorDelay="{listView>/delay}"
+                noDataText="{listView>/noDataText}"
+                mode="{= ${device>/system/phone} ? 'None' : 'SingleSelectMaster'}"
+                growing="true"
+                growingScrollToLoad="true"
+                updateFinished=".onUpdateFinished"
+                selectionChange=".onSelectionChange">
+
+                <infoToolbar>
+                    <Toolbar
+                        active="true"
+                        id="filterBar"
+                        visible="{listView>/isFilterBarVisible}"
+                        press=".onOpenViewSettings">
+                        <Title
+                            id="filterBarLabel"
+                            text="{listView>/filterBarLabel}"
+                            level="H3"/>
+                    </Toolbar>
+                </infoToolbar>
+
+                <headerToolbar>
+                    <OverflowToolbar>
+                        <SearchField
+                            id="searchField"
+                            showRefreshButton="true"
+                            tooltip="{i18n>listSearchTooltip}"
+                            search=".onSearch"
+                            width="auto">
+                            <layoutData>
+                                <OverflowToolbarLayoutData
+                                    minWidth="150px"
+                                    maxWidth="240px"
+                                    shrinkable="true"
+                                    priority="NeverOverflow"/>
+                            </layoutData>
+                        </SearchField>
+                        <ToolbarSpacer/>
+                        <Button press="onCreate"
+                            text="주문생성"
+                            icon="sap-icon://create"
+                            type="Emphasized"/>
+                        <Button
+                            id="sortButton"
+                            press=".onOpenViewSettings"
+                            icon="sap-icon://sort"
+                            type="Transparent"/>
+
+                        <Button
+                            id="filterButton"
+                            press=".onOpenViewSettings"
+                            icon="sap-icon://filter"
+                            type="Transparent"/>
+                        <Button
+                            id="groupButton"
+                            press=".onOpenViewSettings"
+                            icon="sap-icon://group-2"
+                            type="Transparent"/>
+
+                    </OverflowToolbar>
+                </headerToolbar>
+                <columns>
+                    <Column >
+                        <Label text="오더번호"/>
+                    </Column>
+                    <Column minScreenWidth="Tablet" demandPopin="true">
+                        <Label text="구매자"/>
+                    </Column>
+                    <Column >
+                        <Label text="금액"/>
+                    </Column>
+                    <Column >
+                        <Label text="주문날짜"/>
+                    </Column>
+                </columns>
+                <items>
+                    <ColumnListItem type="Navigation" press=".onSelectionChange">
+                        <cells>
+                            <Text text="{Soid}"/>
+                            <Text text="{Buyer}"/>
+                            <Text text="{
+                                parts : [
+                                    { path: 'Amount' },
+                                    { path: 'Currency' }
+                                ],
+                                type: 'sap.ui.model.type.Currency'
+                            }"/>
+                            <Text text="{
+                                path: 'Orderdate',
+                                type: 'sap.ui.model.odata.type.Date',
+                                formatOptions: {
+                                    pattern: 'yy년 MM월 dd일'
+                                }
+                            }"/>
+                        </cells>
+                    </ColumnListItem>
+                    <!-- <ObjectListItem
+                        type="Navigation"
+                        press=".onSelectionChange"
+                        title="{Soid}"
+                        number="{
+                            path: 'Amount',
+                            formatter: '.formatter.numberUnit'
+                        }"
+                        unit="{Currency}" /> -->
+                </items>
+            </Table>
+        </semantic:content>
+    </semantic:SemanticPage>
+</mvc:View>

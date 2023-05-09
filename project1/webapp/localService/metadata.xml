@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="1.0" xmlns:edmx="http://schemas.microsoft.com/ado/2007/06/edmx" xmlns:m="http://schemas.microsoft.com/ado/2007/08/dataservices/metadata" xmlns:sap="http://www.sap.com/Protocols/SAPData">
+    <edmx:DataServices m:DataServiceVersion="2.0">
+        <Schema Namespace="ZSALES_C00_SRV" xml:lang="en" sap:schema-version="1" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+            <EntityType Name="SalesOrder" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Soid"/>
+                </Key>
+                <Property Name="Soid" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="numc5" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Buyer" Type="Edm.String" MaxLength="10" sap:unicode="false" sap:label="Character Field with Length 10" sap:sortable="false"/>
+                <Property Name="Amount" Type="Edm.Decimal" Precision="12" Scale="3" sap:unicode="false" sap:unit="Currency" sap:label="AMOUNT" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Currency" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="CURRENCY" sap:sortable="false" sap:filterable="false" sap:semantics="currency-code"/>
+                <Property Name="Orderdate" Type="Edm.DateTime" Precision="7" sap:unicode="false" sap:label="ORDERDATE" sap:sortable="false" sap:filterable="false"/>
+                <NavigationProperty Name="ToSalesOrderItem" Relationship="ZSALES_C00_SRV.SalesOrder_SalesOrderItem" FromRole="FromRole_SalesOrder_SalesOrderItem" ToRole="ToRole_SalesOrder_SalesOrderItem"/>
+            </EntityType>
+            <EntityType Name="SalesOrderItem" sap:content-version="1">
+                <Key>
+                    <PropertyRef Name="Soid"/>
+                    <PropertyRef Name="Itemno"/>
+                </Key>
+                <Property Name="Soid" Type="Edm.String" Nullable="false" MaxLength="5" sap:unicode="false" sap:label="numc5" sap:updatable="false" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Itemno" Type="Edm.String" Nullable="false" MaxLength="2" sap:unicode="false" sap:label="Two-digit no." sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Itemname" Type="Edm.String" MaxLength="20" sap:unicode="false" sap:label="Char20" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Itemcode" Type="Edm.String" MaxLength="5" sap:unicode="false" sap:label="R/2 table" sap:sortable="false" sap:filterable="false"/>
+                <Property Name="Quantity" Type="Edm.Int16" sap:unicode="false" sap:label="INT2" sap:sortable="false" sap:filterable="false"/>
+            </EntityType>
+            <Association Name="SalesOrder_SalesOrderItem" sap:content-version="1">
+                <End Type="ZSALES_C00_SRV.SalesOrder" Multiplicity="1" Role="FromRole_SalesOrder_SalesOrderItem"/>
+                <End Type="ZSALES_C00_SRV.SalesOrderItem" Multiplicity="*" Role="ToRole_SalesOrder_SalesOrderItem"/>
+                <ReferentialConstraint>
+                    <Principal Role="FromRole_SalesOrder_SalesOrderItem">
+                        <PropertyRef Name="Soid"/>
+                    </Principal>
+                    <Dependent Role="ToRole_SalesOrder_SalesOrderItem">
+                        <PropertyRef Name="Soid"/>
+                    </Dependent>
+                </ReferentialConstraint>
+            </Association>
+            <EntityContainer Name="ZSALES_C00_SRV_Entities" m:IsDefaultEntityContainer="true" sap:supported-formats="atom json xlsx">
+                <EntitySet Name="SalesOrderSet" EntityType="ZSALES_C00_SRV.SalesOrder" sap:pageable="false" sap:content-version="1"/>
+                <EntitySet Name="SalesOrderItemSet" EntityType="ZSALES_C00_SRV.SalesOrderItem" sap:pageable="false" sap:content-version="1"/>
+                <AssociationSet Name="SalesOrder_SalesOrderItemSet" Association="ZSALES_C00_SRV.SalesOrder_SalesOrderItem" sap:creatable="false" sap:updatable="false" sap:deletable="false" sap:content-version="1">
+                    <End EntitySet="SalesOrderSet" Role="FromRole_SalesOrder_SalesOrderItem"/>
+                    <End EntitySet="SalesOrderItemSet" Role="ToRole_SalesOrder_SalesOrderItem"/>
+                </AssociationSet>
+            </EntityContainer>
+            <atom:link rel="self" href="http://sapmento.mento.co.kr:8001/sap/opu/odata/sap/ZSALES_C00_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+            <atom:link rel="latest-version" href="http://sapmento.mento.co.kr:8001/sap/opu/odata/sap/ZSALES_C00_SRV/$metadata" xmlns:atom="http://www.w3.org/2005/Atom"/>
+        </Schema>
+    </edmx:DataServices>
+</edmx:Edmx>
