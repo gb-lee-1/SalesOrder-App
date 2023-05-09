@@ -1,4 +1,4 @@
-<mvc:View
+<mvc:View xmlns:odata="sap.ui.comp.odata"
     controllerName="project1.controller.DetailCreate"
     xmlns="sap.m"
     xmlns:l="sap.ui.layout"
@@ -30,46 +30,57 @@
                 <f:SimpleForm id="SimpleFormChange354"
                     editable="true"
                     layout="ResponsiveGridLayout"
-                    title="Address">
+                    title="헤더 정보">
+                    <f:content>
+                        <Label text="구매자"/>
+                        <Input value="{detailView>/buyer}"/>
+                        <Label text="금액"/>
+                        <Input value="{detailView>/amount}"/>
+                        <Label text="단위"/>
+                        <ComboBox selectedKey="{detailView>/currency}" items="{detailView>/currList}">
+                            <items>
+                                <core:Item key="{detailView>code}" text="{detailView>text}"/>
+                            </items>
+                        </ComboBox>
+                    </f:content>
                 </f:SimpleForm>
                 <Table
                     id="lineItemsList"
                     width="auto"
-                    items="{ToSalesOrderItem}"
-                    updateFinished=".onListUpdateFinished"
-                    noDataText="{i18n>detailLineItemTableNoDataText}"
-                    busyIndicatorDelay="{detailView>/lineItemTableDelay}">
+                    items="{detailView>/itemData}"
+                    noDataText="아이템이 등록되지 않았습니다">
                     <headerToolbar>
                         <Toolbar>
                             <Title
                                 id="lineItemsTitle"
-                                text="{detailView>/lineItemListTitle}"
+                                text="아이템 목록"
                                 titleStyle="H3"
                                 level="H3"/>
+                            <ToolbarSpacer/>
+                            <Button text="추가" press="onAddItem" icon="sap-icon://add"/>
                         </Toolbar>
                     </headerToolbar>
                     <columns>
                         <Column>
-                            <Text text="{i18n>detailLineItemTableIDColumn}"/>
+                            <Text text="아이템 번호"/>
                         </Column>
-                        <Column
-                            minScreenWidth="Tablet"
-                            demandPopin="true"
-                            hAlign="End">
-                            <Text text="{i18n>detailLineItemTableUnitNumberColumn}"/>
+                        <Column>
+                            <Text text="아이템 명"/>
+                        </Column>
+                        <Column>
+                            <Text text="품목코드"/>
+                        </Column>
+                        <Column>
+                            <Text text="수량"/>
                         </Column>
                     </columns>
                     <items>
                         <ColumnListItem>
                             <cells>
-                                <ObjectIdentifier
-                                    title="{Itemno}"
-                                    text="{Soid}"/>
-                                <ObjectNumber
-                                    number="{
-                                        path: 'Quantity',
-                                        formatter: '.formatter.currencyValue'
-                                    }" />
+                                <Input value="{detailView>itemno}"/>
+                                <Input value="{detailView>itemname}"/>
+                                <Input value="{detailView>itemcode}"/>
+                                <Input value="{detailView>quantity}"/>
                             </cells>
                         </ColumnListItem>
                     </items>
