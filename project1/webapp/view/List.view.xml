@@ -66,6 +66,7 @@
                             </layoutData>
                         </SearchField>
                         <ToolbarSpacer/>
+                        <Button text="차트" press="onNavToChart"/>
                         <Button press="onCreate"
                             text="주문생성"
                             icon="sap-icon://create"

@@ -113,6 +113,14 @@
             "list",
             "object"
           ]
+        },
+        {
+          "pattern": "Chart",
+          "name": "chart",
+          "target": [
+            "list",
+            "chart"
+          ]
         }
       ],
       "targets": {
@@ -130,6 +138,12 @@
         "objectCreate": {
           "viewName": "DetailCreate",
           "viewId": "detailCreate",
+          "viewLevel": 1,
+          "controlAggregation": "midColumnPages"
+        },
+        "chart": {
+          "viewName": "Chart",
+          "viewId": "chart",
           "viewLevel": 1,
           "controlAggregation": "midColumnPages"
         },

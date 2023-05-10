@@ -375,6 +375,11 @@ sap.ui.define([
         onCreate: function() {
             this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
             this.getRouter().navTo("objectCreate");
+        },
+
+        onNavToChart : function () {
+            this.getModel("appView").setProperty("/layout", "TwoColumnsMidExpanded");
+            this.getRouter().navTo("chart");
         }
 
     });
