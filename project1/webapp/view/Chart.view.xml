@@ -11,99 +11,38 @@
     xmlns:semantic="sap.f.semantic"
     xmlns:mvc="sap.ui.core.mvc">
 
-    <semantic:SemanticPage
-        id="detailPage"
-        busy="{detailView>/busy}"
-        busyIndicatorDelay="{detailView>/delay}"
-        showFooter="true">
-        <semantic:titleHeading>
-            <Title
-                text="차트 화면"
-                level="H2"/>
-        </semantic:titleHeading>
-        <semantic:headerContent>
-            
-        </semantic:headerContent>
-        <semantic:content>
-            <l:VerticalLayout>
-                <suite:ChartContainer
-                    id="chartContainer"
-                    showFullScreen="true"
-                    showPersonalization="false"
-                    autoAdjustHeight="false"
-                    personalizationPress="attachPersonalizationPress"
-                    contentChange="attachContentChange"
-                    title="판매 분석">
-                    <suite:content>
-                        <suite:ChartContainerContent
-                            icon="sap-icon://line-chart"
-                            title="Line Chart">
-                            <suite:content>
-                                <!-- <viz:Popover id="idPopOver"></viz:Popover> -->
-                                <viz:VizFrame id="idVizFrame" uiConfig="{applicationSet:'fiori'}"
-                                    height='100%' width="100%" vizType='bar'>
-                                    <viz:dataset>   <!-- 차트 데이터 구성 -->
-                                        <viz.data:FlattenedDataset data="{/SalesOrderSet}">
-                                            <viz.data:dimensions>
-                                                <viz.data:DimensionDefinition
-                                                    name="Buyer"
-                                                    value="{Buyer}" />
-                                            </viz.data:dimensions>
-                                            <viz.data:measures>
-                                                <viz.data:MeasureDefinition
-                                                    name="Amount"
-                                                    value="{Amount}" />
-                                            </viz.data:measures>
-                                        </viz.data:FlattenedDataset>
-                                    </viz:dataset>
+    <Page>
+        <content>
+            <Panel height="100%">
+                <viz:VizFrame id="idVizFrame2" uiConfig="{applicationSet:'fiori'}"
+                    height='100%' width="100%" vizType='combination'>
+                    <viz:dataset>
+                        <viz.data:FlattenedDataset data="{detailView>/ChartData}">
+                            <viz.data:dimensions>
+                                <viz.data:DimensionDefinition name="Customer"
+                                    value="{detailView>name}" />
+                            </viz.data:dimensions>
+                            <viz.data:measures>
+                                <viz.data:MeasureDefinition name="Amount"
+                                    value="{detailView>amount}" />
+                                <viz.data:MeasureDefinition name="Count"
+                                    value="{detailView>count}" />
+                            </viz.data:measures>
+                        </viz.data:FlattenedDataset>
+                    </viz:dataset>
 
-                                    <viz:feeds> <!-- 차트 데이터의 차트의 축 정보, 차트가 그려질때 사용-->
-                                        <viz.feeds:FeedItem
-                                            id='valueAxisFeed'
-                                            uid="valueAxis"
-                                            type="Measure"
-                                            values="Amount" />
-                                        <viz.feeds:FeedItem
-                                            uid="categoryAxis"
-                                            type="Dimension"
-                                            values="Buyer" />
-                                    </viz:feeds>
-                                </viz:VizFrame>
-                            </suite:content>
-                        </suite:ChartContainerContent>
-                    </suite:content>
-                </suite:ChartContainer>
-            </l:VerticalLayout>
-        </semantic:content>
-        <!--Semantic ShareMenu Buttons-->
-        <semantic:sendEmailAction>
-            <semantic:SendEmailAction
-                id="shareEmail"
-                press=".onSendEmailPress"/>
-        </semantic:sendEmailAction>
-
-        <semantic:closeAction>
-            <semantic:CloseAction
-                    id="closeColumn"
-                    press=".onCloseDetailPress"/>
-        </semantic:closeAction>
-
-        <semantic:fullScreenAction>
-            <semantic:FullScreenAction
-                    id="enterFullScreen"
-                    visible="{= !${device>/system/phone} &amp;&amp; !${appView>/actionButtonsInfo/midColumn/fullScreen}}"
-                    press=".toggleFullScreen"/>
-        </semantic:fullScreenAction>
-        <semantic:exitFullScreenAction>
-            <semantic:ExitFullScreenAction
-                    id="exitFullScreen"
-                    visible="{= !${device>/system/phone} &amp;&amp; ${appView>/actionButtonsInfo/midColumn/fullScreen}}"
-                    press=".toggleFullScreen"/>
-        </semantic:exitFullScreenAction>
-        <semantic:footerCustomActions>
-            <Button text="저장" type="Accept" press="onPost"/>
-        </semantic:footerCustomActions>
-
-    </semantic:SemanticPage>
+                    <viz:feeds>
+                        <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+                            values="Count" />
+                            
+                        <viz.feeds:FeedItem uid="valueAxis" type="Measure"
+                            values="Amount" />
+                        <viz.feeds:FeedItem id="feedCategoryAxis" uid="categoryAxis" type="Dimension"
+                            values="Customer" />
+                    </viz:feeds>
+                </viz:VizFrame>
+            </Panel>
+        </content>
+    </Page>
 
 </mvc:View>

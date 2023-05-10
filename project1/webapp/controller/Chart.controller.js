@@ -26,7 +26,34 @@ sap.ui.define([
             var oViewModel = new JSONModel({
                 busy : false,
                 delay : 0,
-                lineItemListTitle : this.getResourceBundle().getText("detailLineItemTableHeading")
+                lineItemListTitle : this.getResourceBundle().getText("detailLineItemTableHeading"),
+                ChartData : [
+                    {
+                        name : "Lee",
+                        amount : 10000,
+                        count : 100
+                    },
+                    {
+                        name : "Kim",
+                        amount : 10500,
+                        count : 90
+                    },
+                    {
+                        name : "Hwang",
+                        amount : 9000,
+                        count : 120
+                    },
+                    {
+                        name : "Sung",
+                        amount : 16000,
+                        count : 210
+                    },
+                    {
+                        name : "Yoo",
+                        amount : 2300,
+                        count : 40
+                    }
+                ]
             });
 
             this.getRouter().getRoute("chart").attachPatternMatched(this._onObjectMatched, this);
